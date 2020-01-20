@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Paragraphes Dynamiques</title>
+    <style>
+        h1 {
+            cursor: help;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1> Titre 1 </h1>
+    <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero molestiae dicta tenetur nam, exercitationem
+        veritatis, error esse voluptate dolorem animi fugiat, laudantium debitis repudiandae aut iste consectetur quis
+        facilis eius.
+    </p>
+
+    <h1> Titre 2 </h1>
+    <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero molestiae dicta tenetur nam, exercitationem
+        veritatis, error esse voluptate dolorem animi fugiat, laudantium debitis repudiandae aut iste consectetur quis
+        facilis eius.
+    </p>
+
+    <h1> Titre 3 </h1>
+    <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero molestiae dicta tenetur nam, exercitationem
+        veritatis, error esse voluptate dolorem animi fugiat, laudantium debitis repudiandae aut iste consectetur quis
+        facilis eius.
+    </p>
+
+    <h1> Titre 4 </h1>
+    <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero molestiae dicta tenetur nam, exercitationem
+        veritatis, error esse voluptate dolorem animi fugiat, laudantium debitis repudiandae aut iste consectetur quis
+        facilis eius.
+    </p>
+
+    <h1> Titre 5 </h1>
+    <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero molestiae dicta tenetur nam, exercitationem
+        veritatis, error esse voluptate dolorem animi fugiat, laudantium debitis repudiandae aut iste consectetur quis
+        facilis eius.
+    </p>
+
+
+    <script>
+        //Définition des cibles
+        var titres = document.querySelectorAll("h1");
+        var paragraphe = document.querySelector("p");
+
+        function cliqueSurTitre(even) {
+            let paragraphe = even.target.nextElementSibling;
+            if (paragraphe.style.display == "none") {
+                paragraphe.style.display = "block"
+                even.target.style.backgroundColor = "lightgreen";
+
+            } else {
+                paragraphe.style.display = "none";
+                even.target.style.backgroundColor = "lightblue";
+            }
+        }
+        //Affectation de l'evement à chaque titre
+        for (element of titres) {
+            element.onclick = cliqueSurTitre
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

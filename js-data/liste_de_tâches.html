@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Liste des Tâches</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+
+<body class="container-fluid">
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8 bg-danger">
+            <h1>Liste des tâches</h1>
+
+            <div>
+                <form class="mt-2 form-inline" method="POST">
+                    <div class="form-group">
+                        <label>tâche</label>
+                        <input type="text" id="taskName" class="form-control mx-2">
+                    </div>
+                    <div class="form-group">
+                        <label>catégorie</label>
+                        <select id="category" class="form-control mx-2">
+                            <option value="">Choisissez une catégorie</option>
+                            <option>Personnel</option>
+                            <option>Travail</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </form>
+
+                <table class="table table-bordered table-striped my-4">
+                    <tr>
+                        <th>Fait</th>
+                        <th>Tâche</th>
+                        <th>Catégorie</th>
+                        <th>Action</th>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        //Structure des données
+        var tasklist = [
+            { taskName: "Acheter du lait", category: "Personnel", done: false, id: 1 },
+            { taskName: "Envoyer la facture", category: "Travail", done: true, id: 2 }
+        ];
+
+        /******************************
+         * Lancement de l'application *
+        ******************************/
+        //Récupération des données depuis le localstorage
+        taskList = JSON.parse(window.localstorage.getItem("todos"))|| [];
+
+        // Affichage des tâches
+        setTimeout(
+            function () {
+                for (task of taskList) {
+                    renderTaskRow(task)
+                }
+            },
+            2000
+        );
+
+        console.log("affichage de la liste des tâches");
+
+
+        /*******************************
+        * Définition des cibles du DOM *
+        ********************************/
+
+        var tableElement = document.querySelector("table")
+        var formElement = document.querySelector("form")
+        var taskInput = document.getElementById("taskName")
+        var categoryInput = document.getElementById("category");
+
+        /**************************************
+        * Gestion de l'affichage d'un tableau *
+        ***************************************/
+
+        //Affichage d'une ligne
+        function renderTaskRow(task) {
+            //Création de la ligne
+            let tableRow = document.createElement("tr");
+
+            //Création de la cellule "Fait"
+            let doneCell = document.createElement("td");
+
+            //Création de la case à cocher
+            let doneCheckBox = document.createElement("input");
+            doneCheckBox.setAttribute("type", "checkbox");
+            doneCheckBox.setAttribute("class", "done-checkbox");
+            if (task.done) {
+                doneCheckBox.setAttribute("checked", "checked")
+            }
+
+            //Ajout de la case à cocher dans la cellule
+            doneCell.appendChild(doneCheckBox);
+
+            //Création de la cellule pour le nom de la tâche
+            let taskNameCell = document.createElement("td");
+            taskNameCell.textContent = task.taskName;
+
+            //Création de la cellule pour la catégorie
+            let categoryCell = document.createElement("td")
+            categoryCell.textContent = task.category;
+
+            //Création de la cellule pour l'action
+            let actionCell = document.createElement("td");
+
+            //Création du bouton "supprimer"
+            let deleteButton = document.createElement("button")
+            deleteButton.setAttribute("type", "button");
+            deleteButton.setAttribute("class", "btn btn-primary delete");
+            deleteButton.setAttribute("data-id", task.id);
+            deleteButton.textContent = "Delete";
+
+            //Ajout du bouton à la cellule
+            actionCell.appendChild(deleteButton);
+
+            //Ajout des cellules "fait" à la ligne
+            tableRow.appendChild(doneCell);
+            tableRow.appendChild(taskNameCell);
+            tableRow.appendChild(categoryCell);
+            tableRow.appendChild(actionCell);
+
+
+            //Ajout de la ligne à la table HTML (dans le DOM)
+            tableElement.appendChild(tableRow);
+
+        }
+        /********************************
+        * Gestion de l'ajout des tâches *
+        *********************************/
+        formElement.onsubmit = function (ev) {
+            //Empêche l'envoi du formulaire
+            ev.preventDefault();
+
+            //Récupération de la saisie
+            let taskNameText = taskInput.value.trim();
+            let categoryNameText = categoryInput.value.trim();
+
+            //Création d'une nouvelle tâche
+            //uniquement si la saisie n'est pas vide
+            if (taskNameText != "" && categoryNameText != "") {
+
+                //Création d'un objet tâche
+                let task = {
+                    taskName: taskNameText,
+                    category: categoryNameText,
+                    done: false,
+                    id: (new Date()).getTime()
+                }
+
+                // Ajout de la nouvelle tâche à la liste
+                tasklist.push(task);
+
+                //Ajout de la tâche au tableau HTML
+                renderTaskRow(task);
+
+                //Presistence des tâches
+                window.localStorage.setItem("todos", JSON.stringify(tasklist))
+                //Réinitialisation du formulaire
+                taskInput.value = "";
+                categoryInput.value.selectedIndex = 0;
+
+                taskInput.focus();
+
+            }
+
+            return false;
+        }
+
+        /***************************************
+        * Gestion de la suppression des tâches *
+        ****************************************/
+
+
+
+    </script>
+
+
+</body>
+
+</html>
